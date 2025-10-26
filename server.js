@@ -7,7 +7,10 @@ import otpRoutes from "./routes/otpRoute.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://boosterera-frontend.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],//good to GO
+}));
 app.use(express.json());
 
 // MongoDB connection
