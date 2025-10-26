@@ -39,11 +39,23 @@ export const sendOtp = async (req, res) => {
     await user.save();
 
     if (method === "email") {
-      await sendEmail(
-        contact, 
-        "Your BoosterEra OTP", 
-        `Your OTP is ${otp}. It expires in 2 minutes.\nBooking ID: ${bookingId}`
-      );
+      try {
+        await sendEmail(
+          contact, 
+          "Your BoosterEra OTP", 
+          `Your OTP is ${otp}. It expires in 2 minutes.\nBooking ID: ${bookingId}`
+        );
+      } catch (emailError) {
+        // If email fails, delete the user entry to maintain consistency
+        if (user._id) {
+          await User.findByIdAndDelete(user._id);
+        }
+        console.error("Email Error Details:", emailError);
+        return res.status(500).json({ 
+          success: false, 
+          message: emailError.message || "Failed to send OTP email. Please try again."
+        });
+      }
     } else {
       console.log(`📱 Simulated SMS sent to ${contact}: OTP = ${otp}`);
       // You could integrate a free SMS gateway API here
@@ -55,8 +67,11 @@ export const sendOtp = async (req, res) => {
       bookingId
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Failed to send OTP" });
+    console.error("Server Error:", err);
+    res.status(500).json({ 
+      success: false, 
+      message: "Server error while processing your request. Please try again."
+    });
   }
 };
 
