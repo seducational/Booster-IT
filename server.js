@@ -8,8 +8,9 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: "https://boosterera-frontend.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE"],//good to GO
+  origin: "https://boosterera-frontend.vercel.app" ,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
 }));
 app.use(express.json());
 
