@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: ["https://boosterera-frontend.vercel.app", "https://booster-it-dashboard.vercel.app"],
+  origin: ["https://boosterera-frontend.vercel.app", "https://booster-it-dashboard.vercel.app", "http://localhost:5173"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
